@@ -6,7 +6,8 @@ var Game = {
 			width: 60,
 			height: 40,
 			fontSize: 14,
-			forceSquareRatio:false
+			forceSquareRatio:false,
+			fontFamily: "SoftwareTester7"
 		}
 		
 		container = document.getElementById("GameContainer");
