@@ -29,6 +29,16 @@ var Game = {
         this.display = new ROT.Display(options);
         container.appendChild(this.display.getContainer());
 		
+		//setup player
+		var Player = function(x, y) {
+			this._x = x;
+			this._y = y;
+			this._draw();
+		}
+		Player.prototype._draw = function() {
+			Game.display.draw(this._x, this._y, "@", "#ff0");
+		}
+		
 		//setup map generation
 		this.map = [];
 		for (var x = 0; x < w; x++)
@@ -44,6 +54,7 @@ var Game = {
 			cellular.create();
 			cellular.create();
 			cellular.create();
+			cellular.set(30, 30, false); //empty spot for the player to start in
 			cellular.connect();
 			cellular.serviceCallback(mapCallback.bind(this));
 		}
@@ -64,10 +75,10 @@ var Game = {
 			}
 		}
 		
+		
 		//generate map
 		this.generateMap();
 		this.drawWholeMap();
-		
-		
+		this.player = new Player(30,30);
     }
 }
