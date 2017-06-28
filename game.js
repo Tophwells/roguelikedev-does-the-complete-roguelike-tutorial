@@ -48,7 +48,7 @@ var Game = {
 			var newY = this._y + yDelta;
 			if (newX < 0 || newX >= Game.w || newY < 0 || newY >= Game.h) //can't move out of bounds
 				return;
-			if (Game.map[newX][newY]) //can't move into a wall (this implies moving *out* of a wall is fine, but that should never happen)
+			if (Game.map[newX+","+newY]) //can't move into a wall (this implies moving *out* of a wall is fine, but that should never happen)
 				return;
 			this._x = newX;
 			this._y = newY;
@@ -56,13 +56,9 @@ var Game = {
 		}
 		
 		//setup map generation
-		this.map = [];
-		for (var x = 0; x < this.w; x++)
-		{
-			this.map[x] = []; 
-		}
+		this.map = {};
 		var mapCallback = function(x, y, value) {
-        this.map[x][y] = value;
+        this.map[x+","+y] = value;
 		}
 		this.generateMap = function() {
 			var cellular = new ROT.Map.Cellular(this.w, this.h,{topology: 4, born:[3,4], survive: [2,3,4]});
@@ -83,7 +79,7 @@ var Game = {
 			{
 				for (var y = 0; y < this.h; y++)
 				{
-					if (this.map[x][y]) //wall
+					if (this.map[x+","+y]) //wall
 					{
 						this.display.draw(x, y, " ", "#000", "#fff");
 					}
