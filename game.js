@@ -104,6 +104,7 @@ var Game = {
 		
 		//update loop
 		document.addEventListener("keydown", function(e) { //TODO: figure out what the best behaviour is if the user has something else selected
+			var a = performance.now();
 			var code = e.keyCode;
 			if (code == ROT.VK_UP)
 				Game.player.move(0,-1);
@@ -114,6 +115,8 @@ var Game = {
 			if (code == ROT.VK_RIGHT)
 				Game.player.move(1,0);
 			Game.drawEverything();
+			Game.display._tick();
+			console.log(performance.now() - a);
 		});
     }
 }
