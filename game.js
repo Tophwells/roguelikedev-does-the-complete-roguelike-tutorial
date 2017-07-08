@@ -1,74 +1,15 @@
 var Game = {
     display: null,
  
-	w: 60,
-	h: 40,
+	w: 40,
+	h: 30,
  
-    init: function() {
+    init: function() { //called in index.html when the game loads
 		
-		//perform canvas setup
-		var options = {
-			width: this.w,
-			height: this.h,
-			fontSize: 14,
-			forceSquareRatio:true,
-			fontFamily: "Helvetica"
-		}
-		
-		var container = document.getElementById("GameContainer");
-		if (!("ROT" in window))
+		var canvasExists = this.performCanvasSetup();
+		if (!canvasExists)
 		{
-			container.innerHTML = "Error: rot.js has not been loaded.";
-			return;
-		}
-		if (!ROT.isSupported())
-		{
-			container.innerHTML = "Error: Your browser does not support rot.js.";
-			return;
-		}
-		container.innerHTML = "";
-		
-        this.display = new ROT.Display(options);
-        container.appendChild(this.display.getContainer());
-		
-		//setup player
-		var Player = function(x, y) {
-			this._x = x;
-			this._y = y;
-		}
-		Player.prototype.draw = function() {
-			Game.display.draw(this._x, this._y, "@", "#fff");
-		}
-		
-		Player.prototype.move = function(xDelta, yDelta) {
-			if (Math.abs(xDelta) + Math.abs(yDelta) != 1) //can't move more than one tile at a time
-				return;
-			
-			var newX = this._x + xDelta;
-			var newY = this._y + yDelta;
-			if (newX < 0 || newX >= Game.w || newY < 0 || newY >= Game.h) //can't move out of bounds
-				return;
-			if (Game.map[newX+","+newY]) //can't move into a wall (this implies moving *out* of a wall is fine, but that should never happen)
-				return;
-			this._x = newX;
-			this._y = newY;
-			
-		}
-		
-		//setup map generation
-		this.map = {};
-		var mapCallback = function(x, y, value) {
-        this.map[x+","+y] = value;
-		}
-		this.generateMap = function() {
-			var cellular = new ROT.Map.Cellular(this.w, this.h,{topology: 4, born:[3,4], survive: [2,3,4]});
-			cellular.randomize(0.5);
-			cellular.create();
-			cellular.create();
-			cellular.create();
-			cellular.set(30, 20, false); //empty spot for the player to start in
-			cellular.connect();
-			cellular.serviceCallback(mapCallback.bind(this));
+			return false;
 		}
 		this.drawEverything = function() {
 			this.drawWholeMap();
@@ -99,8 +40,8 @@ var Game = {
 
 		
 		//update loop
-		document.addEventListener("keydown", function(e) { //TODO: figure out what the best behaviour is if the user has something else selected
-			var a = performance.now();
+		document.addEventListener("keydown", function(e) { //TODO: figure out what the best behaviour is if the user has something on the page selected
+			//var a = performance.now();
 			var code = e.keyCode;
 			if (code == ROT.VK_UP)
 				Game.player.move(0,-1);
@@ -111,8 +52,7 @@ var Game = {
 			if (code == ROT.VK_RIGHT)
 				Game.player.move(1,0);
 			Game.drawEverything();
-			Game.display._tick();
-			console.log(performance.now() - a);
+			//console.log(performance.now() - a);
 		});
     }
 }
