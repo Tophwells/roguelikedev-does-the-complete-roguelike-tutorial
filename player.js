@@ -3,7 +3,7 @@ Player = function(x, y) {
 	this._y = y;
 }
 Player.prototype.draw = function() {
-	Game.display.draw(this._x, this._y, "@", "#fff");
+	Game.draw(this._x, this._y, "@", "#fff");
 }
 
 Player.prototype.move = function(xDelta, yDelta) {

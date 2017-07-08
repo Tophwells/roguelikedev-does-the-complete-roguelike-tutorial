@@ -4,7 +4,7 @@ var mapCallback = function(x, y, value) {
 Game.map[x+","+y] = value;
 }
 Game.generateMap = function() {
-	var cellular = new ROT.Map.Cellular(this.w, this.h,{topology: 4, born:[3,4], survive: [2,3,4]});
+	var cellular = new ROT.Map.Cellular(this.mapWidth, this.mapHeight,{topology: 4, born:[3,4], survive: [2,3,4]});
 	cellular.randomize(0.5);
 	cellular.create();
 	cellular.create();

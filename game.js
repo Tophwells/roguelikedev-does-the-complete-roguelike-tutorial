@@ -1,8 +1,15 @@
 var Game = {
     display: null,
- 
-	w: 40,
-	h: 30,
+	
+	//size of screen
+	screenWidth: 20,
+	screenHeight: 20,
+	
+	mapWidth: 80,
+	mapHeight: 80,
+	
+	xOffset: 0,
+	yOffset: 0,
  
     init: function() { //called in index.html when the game loads
 		
@@ -12,24 +19,42 @@ var Game = {
 			return false;
 		}
 		this.drawEverything = function() {
+			this.xOffset = this.player._x - 10;
+			this.yOffset = this.player._y - 10;
 			this.drawWholeMap();
 			this.player.draw();
 		}
+		
+
 		this.drawWholeMap = function() {
-			for (var x = 0; x < this.w; x++)
+
+			var xMin = this.xOffset;
+			var yMin = this.yOffset;
+			var xMax = this.xOffset + this.screenWidth;
+			var yMax = this.yOffset + this.screenHeight;
+			
+			for (var x = xMin; x < xMax; x++)
 			{
-				for (var y = 0; y < this.h; y++)
+				for (var y = yMin; y < yMax; y++)
 				{
-					if (this.map[x+","+y]) //wall
+					if (this.map[x+","+y] == 1) //wall
 					{
-						this.display.draw(x, y, " ", "#000", "#fff");
+						this.draw(x, y, " ", "#000", "#fff");
 					}
-					else //floor
+					else if (this.map[x+","+y] == 0) //floor
 					{
-						this.display.draw(x, y, ".", "#fff", "#000");
+						this.draw(x, y, ".", "#fff", "#000");
+					}
+					else if (this.map[x+","+y] == undefined) //out of bounds, or undefined for some reason
+					{
+						this.draw(x, y, "#", "#fff", "#888");
 					}
 				}
 			}
+		}
+		
+		this.draw = function(x,y,ch,fg,bg) {
+			this.display.draw(x-this.xOffset, y-this.yOffset, ch, fg, bg);
 		}
 		
 		

@@ -1,7 +1,7 @@
 Game.performCanvasSetup = function() {
 	var options = {
-		width: this.w,
-		height: this.h,
+		width: this.screenWidth,
+		height: this.screenHeight,
 		fontSize: 14,
 		forceSquareRatio:true,
 		fontFamily: "Helvetica"
